@@ -1,22 +1,28 @@
-export const stepData = [
+import type { IStep } from "../types/step";
+
+export const stepData: IStep[] = [
   {
     id: 1,
     title: "Choose your cameras",
-    stepNumber: 1,
+    icon: "camera",
+    isOpen: true,
   },
   {
     id: 2,
     title: "Choose your plan",
-    stepNumber: 1,
+    icon: "shield",
+    isOpen: false,
   },
   {
     id: 3,
     title: "Choose your sensors",
-    stepNumber: 1,
+    icon: "sensor",
+    isOpen: false,
   },
   {
     id: 4,
     title: "Add extra protection",
-    stepNumber: 1,
+    icon: "lock",
+    isOpen: false,
   },
 ];

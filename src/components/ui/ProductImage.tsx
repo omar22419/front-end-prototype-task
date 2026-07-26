@@ -1,8 +1,17 @@
+interface ProductImageProps {
+  src: string;
+  alt: string;
+}
 
-export default function ProductImage() {
+export default function ProductImage({
+  src,
+  alt,
+}: ProductImageProps) {
   return (
-    <div className="">
-        <img src="/src/assets/7377c4c026acb3c476e41ccec1e0376490ee2cb9.png" alt="" />
-    </div>
-  )
+    <img
+      src={src}
+      alt={alt}
+      className="h-[90px] w-[90px] mt-3 object-contain"
+    />
+  );
 }

@@ -1,7 +1,13 @@
-import React from 'react'
+interface DiscountBadgeProps {
+  text: string;
+}
 
-export default function DiscountBadge() {
+export default function DiscountBadge({ text }: DiscountBadgeProps) {
   return (
-        <span className='px-2  text-sm  rounded-xl bg-[#4E2FD2]  text-white'>Save 22%</span>
-  )
+    <span
+      className="rounded-full bg-[#4E2FD2] px-2 py-1 text-[11px] font-medium text-white"
+    >
+      {text}
+    </span>
+  );
 }

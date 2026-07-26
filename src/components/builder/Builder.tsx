@@ -1,10 +1,17 @@
-
-
+import AccordionStep from "./AccordionStep";
+import { useBundleStore } from "../../store/bundleStore";
 
 export default function Builder() {
+  const steps = useBundleStore((state) => state.steps);
+
   return (
-    <section className="rounded-xl border border-gray-300 p-6">
-      Builder
+    <section className="space-y-[13px]">
+      {steps.map((step) => (
+        <AccordionStep
+          key={step.id}
+          step={step}
+        />
+      ))}
     </section>
   );
 }
