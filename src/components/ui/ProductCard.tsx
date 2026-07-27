@@ -6,21 +6,23 @@ import ProductImage from "./ProductImage";
 import ProductInfo from "./ProductInfo";
 import VariantSelector from "./VariantSelector";
 import QuantitySelector from "./QuantitySelector";
-import { useBundleStore } from "../../store/bundleStore";
 import ProductPrice from "./ProductPrice";
 
 interface ProductCardProps {
   product: Product;
+
+  onIncrease: (variantId: string) => void;
+  onDecrease: (variantId: string) => void;
+  onSelectVariant: (variantId: string) => void;
 }
 
-export default function ProductCard({ product }: ProductCardProps) {
+export default function ProductCard({
+  product,
+  onIncrease,
+  onDecrease,
+  onSelectVariant,
+}: ProductCardProps) {
   const selectedVariantId = product.selectedVariantId;
-
-  const increaseQuantity = useBundleStore((state) => state.increaseQuantity);
-
-  const decreaseQuantity = useBundleStore((state) => state.decreaseQuantity);
-
-  const selectVariant = useBundleStore((state) => state.selectVariant);
 
   const selectedVariant = product.variants?.find(
     (variant) => variant.id === selectedVariantId,
@@ -36,7 +38,6 @@ export default function ProductCard({ product }: ProductCardProps) {
           : "border border-[#E7E7E7]",
       )}
     >
-
       <div className=" flex gap-4">
         <div>
           {product.badge && <DiscountBadge text={product.badge} />}
@@ -54,16 +55,14 @@ export default function ProductCard({ product }: ProductCardProps) {
             <VariantSelector
               variants={product.variants}
               selectedVariantId={selectedVariantId}
-              onSelectVariant={(variantId) =>
-                selectVariant(product.id, variantId)
-              }
+              onSelectVariant={onSelectVariant}
             />
           )}
           <div className="mt-auto flex items-end justify-between">
             <QuantitySelector
               quantity={quantity}
-              onIncrease={() => increaseQuantity(product.id, selectedVariantId)}
-              onDecrease={() => decreaseQuantity(product.id, selectedVariantId)}
+              onIncrease={() => onIncrease(selectedVariantId)}
+              onDecrease={() => onDecrease(selectedVariantId)}
             />
 
             <ProductPrice

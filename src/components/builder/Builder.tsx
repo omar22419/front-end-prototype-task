@@ -5,7 +5,7 @@ export default function Builder() {
   const steps = useBundleStore((state) => state.steps);
 
   return (
-    <section className="space-y-[13px]">
+    <section>
       {steps.map((step) => (
         <AccordionStep
           key={step.id}

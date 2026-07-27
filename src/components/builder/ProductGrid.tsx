@@ -1,8 +1,21 @@
 import ProductCard from "../ui/ProductCard";
+
+import type { Product } from "../../types/product";
+
 import { useBundleStore } from "../../store/bundleStore";
 
-export default function ProductGrid() {
-  const products = useBundleStore((state) => state.products);
+interface ProductGridProps {
+  products: Product[];
+
+  category: "products" | "sensors" | "accessories";
+}
+
+export default function ProductGrid({ products, category }: ProductGridProps) {
+  const increaseQuantity = useBundleStore((state) => state.increaseQuantity);
+
+  const decreaseQuantity = useBundleStore((state) => state.decreaseQuantity);
+
+  const selectVariant = useBundleStore((state) => state.selectVariant);
 
   return (
     <div className="grid grid-cols-2 gap-[16px]">
@@ -15,7 +28,18 @@ export default function ProductGrid() {
               : ""
           }
         >
-          <ProductCard product={product} />
+          <ProductCard
+            product={product}
+            onIncrease={(variantId) =>
+              increaseQuantity(category, product.id, variantId)
+            }
+            onDecrease={(variantId) =>
+              decreaseQuantity(category, product.id, variantId)
+            }
+            onSelectVariant={(variantId) =>
+              selectVariant(category, product.id, variantId)
+            }
+          />
         </div>
       ))}
     </div>
