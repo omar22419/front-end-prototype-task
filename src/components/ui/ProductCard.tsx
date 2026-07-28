@@ -32,14 +32,14 @@ export default function ProductCard({
   return (
     <article
       className={cn(
-        "w-full rounded-[10px] bg-white transition-all p-[10px]   lg:max-w-[370px] lg:h-[180px] lg:p-[11px]",
+        "w-full rounded-[10px] bg-white transition-all p-[10px] lg:max-w-[400px] lg:h-[180px] lg:p-[11px]",
         product.isSelected
           ? "border-2 border-[#4E2FD2B2]"
           : "border border-[#E7E7E7]",
       )}
     >
       <div className="flex gap-2 md:flex-col lg:flex-row">
-        <div className="w-[110px]">
+        <div className="w-[120px]">
           {product.badge && <DiscountBadge text={product.badge} />}
           <ProductImage src={product.image} alt={product.title} />
         </div>

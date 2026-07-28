@@ -9,15 +9,34 @@ import { accessoryProducts } from "../data/accessories";
 
 type ProductCategory = "products" | "sensors" | "accessories";
 
+const STORAGE_KEY = "bundle-builder";
+
+function saveBundleState(state: {
+  products: typeof cameraProducts;
+  sensors: typeof sensorProducts;
+  accessories: typeof accessoryProducts;
+  plans: typeof plans;
+}) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+function loadBundleState() {
+  const saved = localStorage.getItem(STORAGE_KEY);
+
+  if (!saved) return null;
+
+  try {
+    return JSON.parse(saved);
+  } catch {
+    return null;
+  }
+}
+
 interface BundleStore {
   products: typeof cameraProducts;
-
   sensors: typeof sensorProducts;
-
   accessories: typeof accessoryProducts;
-
   steps: IStep[];
-
   plans: typeof plans;
 
   openStep: (stepId: number) => void;
@@ -28,19 +47,19 @@ interface BundleStore {
   selectVariant: (
     category: ProductCategory,
     productId: string,
-    variantId: string,
+    variantId: string
   ) => void;
 
   increaseQuantity: (
     category: ProductCategory,
     productId: string,
-    variantId: string,
+    variantId: string
   ) => void;
 
   decreaseQuantity: (
     category: ProductCategory,
     productId: string,
-    variantId: string,
+    variantId: string
   ) => void;
 }
 
@@ -69,97 +88,144 @@ function updateCategoryProducts(
     return {
       ...product,
       variants,
-      isSelected: variants.some((v) => v.quantity > 0),
+      isSelected: variants.some((variant) => variant.quantity > 0),
     };
   });
 }
 
 
+export const useBundleStore = create<BundleStore>((set) => {
+  const savedState = loadBundleState();
 
-export const useBundleStore = create<BundleStore>((set) => ({
-  products: cameraProducts,
+  return {
+    products: savedState?.products ?? cameraProducts,
+    sensors: savedState?.sensors ?? sensorProducts,
+    accessories: savedState?.accessories ?? accessoryProducts,
+    plans: savedState?.plans ?? plans,
 
-  sensors: sensorProducts,
+    steps: stepData,
 
-  accessories: accessoryProducts,
 
-  steps: stepData,
+    // --------------------
+    // Step Actions
+    // --------------------
 
-  plans,
+    openStep: (stepId) =>
+      set((state) => {
+        const clickedStep = state.steps.find(
+          (step) => step.id === stepId
+        );
 
-  openStep: (stepId) =>
-    set((state) => {
-      const clickedStep = state.steps.find((step) => step.id === stepId);
+        const shouldOpen = !clickedStep?.isOpen;
 
-      const shouldOpen = !clickedStep?.isOpen;
+        return {
+          steps: state.steps.map((step) => ({
+            ...step,
+            isOpen:
+              step.id === stepId ? shouldOpen : false,
+          })),
+        };
+      }),
 
-      return {
-        steps: state.steps.map((step) => ({
-          ...step,
-          isOpen: step.id === stepId ? shouldOpen : false,
+
+    nextStep: (currentStepId) =>
+      set((state) => {
+        const nextExists = state.steps.some(
+          (step) => step.id === currentStepId + 1
+        );
+
+        if (!nextExists) return state;
+
+        return {
+          steps: state.steps.map((step) => ({
+            ...step,
+            isOpen:
+              step.id === currentStepId + 1,
+          })),
+        };
+      }),
+
+
+
+    // --------------------
+    // Plan Actions
+    // --------------------
+
+    selectPlan: (planId) =>
+      set((state) => ({
+        plans: state.plans.map((plan) => ({
+          ...plan,
+          isSelected: plan.id === planId,
         })),
-      };
-    }),
-
-  nextStep: (currentStepId) =>
-    set((state) => {
-      const nextExists = state.steps.some(
-        (step) => step.id === currentStepId + 1,
-      );
-
-      if (!nextExists) return state;
-
-      return {
-        steps: state.steps.map((step) => ({
-          ...step,
-          isOpen: step.id === currentStepId + 1,
-        })),
-      };
-    }),
-
-  // --------------------
-  // Plan Actions
-  // --------------------
-  selectPlan: (planId) =>
-    set((state) => ({
-      plans: state.plans.map((plan) => ({
-        ...plan,
-        isSelected: plan.id === planId,
       })),
-    })),
 
-  // --------------------
-  // Product Actions
-  // --------------------
-selectVariant: (category, productId, variantId) =>
-  set((state) => ({
-    [category]: state[category].map((product) =>
-      product.id === productId
-        ? {
-            ...product,
-            selectedVariantId: variantId,
-          }
-        : product
-    ),
-  })),
 
-increaseQuantity: (category, productId, variantId) =>
-  set((state) => ({
-    [category]: updateCategoryProducts(
-      state[category],
+
+    // --------------------
+    // Product Actions
+    // --------------------
+
+    selectVariant: (
+      category,
       productId,
-      variantId,
-      "increase"
-    ),
-  })),
+      variantId
+    ) =>
+      set((state) => ({
+        [category]: state[category].map((product) =>
+          product.id === productId
+            ? {
+                ...product,
+                selectedVariantId: variantId,
+              }
+            : product
+        ),
+      })),
 
-decreaseQuantity: (category, productId, variantId) =>
-  set((state) => ({
-    [category]: updateCategoryProducts(
-      state[category],
+
+
+    increaseQuantity: (
+      category,
       productId,
-      variantId,
-      "decrease"
-    ),
-  })),
-}));
+      variantId
+    ) =>
+      set((state) => ({
+        [category]: updateCategoryProducts(
+          state[category],
+          productId,
+          variantId,
+          "increase"
+        ),
+      })),
+
+
+
+    decreaseQuantity: (
+      category,
+      productId,
+      variantId
+    ) =>
+      set((state) => ({
+        [category]: updateCategoryProducts(
+          state[category],
+          productId,
+          variantId,
+          "decrease"
+        ),
+      })),
+  };
+});
+
+
+
+// --------------------
+// Local Storage Sync
+// --------------------
+
+useBundleStore.subscribe((state) => {
+  saveBundleState({
+    products: state.products,
+    sensors: state.sensors,
+    accessories: state.accessories,
+    plans: state.plans,
+  });
+});
