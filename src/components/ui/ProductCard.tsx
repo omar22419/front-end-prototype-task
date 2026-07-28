@@ -32,19 +32,19 @@ export default function ProductCard({
   return (
     <article
       className={cn(
-        "rounded-[10px] bg-white p-[11px] transition-all",
+        "w-full rounded-[10px] bg-white transition-all p-[10px]   lg:max-w-[370px] lg:h-[180px] lg:p-[11px]",
         product.isSelected
           ? "border-2 border-[#4E2FD2B2]"
           : "border border-[#E7E7E7]",
       )}
     >
-      <div className=" flex gap-4">
-        <div>
+      <div className="flex gap-2 md:flex-col lg:flex-row">
+        <div className="w-[110px]">
           {product.badge && <DiscountBadge text={product.badge} />}
           <ProductImage src={product.image} alt={product.title} />
         </div>
 
-        <div className="flex flex-1 flex-col">
+        <div className="flex h-full flex-col gap-[19px] md:gap-3">
           <ProductInfo
             title={product.title}
             description={product.description}
@@ -58,7 +58,7 @@ export default function ProductCard({
               onSelectVariant={onSelectVariant}
             />
           )}
-          <div className="mt-auto flex items-end justify-between">
+          <div className="mt-auto flex items-end justify-between gap-2">
             <QuantitySelector
               quantity={quantity}
               onIncrease={() => onIncrease(selectedVariantId)}

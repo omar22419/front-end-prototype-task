@@ -46,7 +46,7 @@ export default function AccordionStep({ step }: AccordionStepProps) {
 
   return (
     <section
-      className={`rounded-[10px] transition-all duration-200 py-3 ${
+      className={`rounded-[10px] transition-all duration-200  ${
         step.isOpen ? "bg-[#EDF4FF]" : "bg-white"
       }`}
     >

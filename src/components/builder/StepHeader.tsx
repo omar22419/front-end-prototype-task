@@ -1,11 +1,13 @@
 import {
-  Camera,
   ChevronDown,
   ChevronUp,
-  Lock,
-  Radio,
-  Shield,
 } from "lucide-react";
+
+import cameraIcon from '../../assets/camera-icon.svg'
+import shieldIcon from '../../assets/shield-icon.svg'
+import sensorsIcon from '../../assets/sensors-icon.svg'
+import extraIcon from '../../assets/extera-production-icon.svg'
+
 
 interface IStepHeaderProps {
   title: string;
@@ -15,10 +17,10 @@ interface IStepHeaderProps {
 }
 
 const stepIcons = {
-  camera: Camera,
-  shield: Shield,
-  sensor: Radio,
-  lock: Lock,
+  camera: cameraIcon,
+  shield: shieldIcon,
+  sensor: sensorsIcon,
+  lock: extraIcon,
 };
 
 export default function StepHeader({
@@ -33,8 +35,8 @@ export default function StepHeader({
     <div
       className={`flex items-center justify-between px-[15px] py-[12px] ${isOpen ? "" : "border-b border-[#C9D4E5]"}`}
     >
-      <div className="flex items-center gap-3">
-        <Icon size={22} strokeWidth={1.75} className="text-[#4B5563]" />
+      <div className="flex items-center gap-2">
+        <img src={`${Icon}`} className="w-[22px] h-[22px]" />
 
         <h3 className="text-[18px] font-semibold text-[#1F1F1F]">{title}</h3>
       </div>

@@ -67,129 +67,134 @@ export default function ReviewPanel() {
   return (
     <aside className="w-full rounded-[10px] bg-[#EDF4FF] p-[15px]">
       <ReviewHeader />
+      <div className="grid gap-4 gap-y-6 lg:gap-8 grid-cols-1 md:grid-cols-[1fr_1fr] lg:grid-cols-1">
+        <div className="space-y-4">
+          <ReviewSection title="Cameras">
+            {selectedProducts.map((product) => {
+              const selectedVariant = product.variants?.find(
+                (variant) => variant.quantity > 0,
+              );
 
-      <ReviewSection title="Cameras">
-        {selectedProducts.map((product) => {
-          const selectedVariant = product.variants?.find(
-            (variant) => variant.quantity > 0,
-          );
+              if (!selectedVariant) return null;
 
-          if (!selectedVariant) return null;
+              return (
+                <ReviewProduct
+                  key={product.id}
+                  image={selectedVariant.image ?? product.image}
+                  title={product.title}
+                  quantity={selectedVariant.quantity}
+                  price={product.price}
+                  compareAtPrice={product.compareAtPrice}
+                  onIncrease={() =>
+                    increaseQuantity(
+                      "products",
+                      product.id,
+                      product.selectedVariantId,
+                    )
+                  }
+                  onDecrease={() =>
+                    decreaseQuantity(
+                      "products",
+                      product.id,
+                      product.selectedVariantId,
+                    )
+                  }
+                />
+              );
+            })}
+          </ReviewSection>
 
-          return (
-            <ReviewProduct
-              key={product.id}
-              image={selectedVariant.image ?? product.image}
-              title={product.title}
-              quantity={selectedVariant.quantity}
-              price={product.price}
-              compareAtPrice={product.compareAtPrice}
-              onIncrease={() =>
-                increaseQuantity(
-                  "products",
-                  product.id,
-                  product.selectedVariantId,
-                )
-              }
-              onDecrease={() =>
-                decreaseQuantity(
-                  "products",
-                  product.id,
-                  product.selectedVariantId,
-                )
-              }
-            />
-          );
-        })}
-      </ReviewSection>
+          <ReviewSection title="Sensors">
+            {selectedSensors.map((product) => {
+              const selectedVariant = product.variants?.find(
+                (variant) => variant.quantity > 0,
+              );
 
-      <ReviewSection title="Sensors">
-        {selectedSensors.map((product) => {
-          const selectedVariant = product.variants?.find(
-            (variant) => variant.quantity > 0,
-          );
+              if (!selectedVariant) return null;
 
-          if (!selectedVariant) return null;
+              return (
+                <ReviewProduct
+                  key={product.id}
+                  image={selectedVariant.image ?? product.image}
+                  title={product.title}
+                  quantity={selectedVariant.quantity}
+                  price={product.price}
+                  compareAtPrice={product.compareAtPrice}
+                  onIncrease={() =>
+                    increaseQuantity(
+                      "sensors",
+                      product.id,
+                      product.selectedVariantId,
+                    )
+                  }
+                  onDecrease={() =>
+                    decreaseQuantity(
+                      "sensors",
+                      product.id,
+                      product.selectedVariantId,
+                    )
+                  }
+                />
+              );
+            })}
+          </ReviewSection>
 
-          return (
-            <ReviewProduct
-              key={product.id}
-              image={selectedVariant.image ?? product.image}
-              title={product.title}
-              quantity={selectedVariant.quantity}
-              price={product.price}
-              compareAtPrice={product.compareAtPrice}
-              onIncrease={() =>
-                increaseQuantity(
-                  "sensors",
-                  product.id,
-                  product.selectedVariantId,
-                )
-              }
-              onDecrease={() =>
-                decreaseQuantity(
-                  "sensors",
-                  product.id,
-                  product.selectedVariantId,
-                )
-              }
-            />
-          );
-        })}
-      </ReviewSection>
+          <ReviewSection title="Accessories">
+            {selectedAccessories.map((product) => {
+              const selectedVariant = product.variants?.find(
+                (variant) => variant.quantity > 0,
+              );
 
-      <ReviewSection title="Accessories">
-        {selectedAccessories.map((product) => {
-          const selectedVariant = product.variants?.find(
-            (variant) => variant.quantity > 0,
-          );
+              if (!selectedVariant) return null;
 
-          if (!selectedVariant) return null;
+              return (
+                <ReviewProduct
+                  key={product.id}
+                  image={selectedVariant.image ?? product.image}
+                  title={product.title}
+                  quantity={selectedVariant.quantity}
+                  price={product.price}
+                  compareAtPrice={product.compareAtPrice}
+                  onIncrease={() =>
+                    increaseQuantity(
+                      "accessories",
+                      product.id,
+                      product.selectedVariantId,
+                    )
+                  }
+                  onDecrease={() =>
+                    decreaseQuantity(
+                      "accessories",
+                      product.id,
+                      product.selectedVariantId,
+                    )
+                  }
+                />
+              );
+            })}
+          </ReviewSection>
 
-          return (
-            <ReviewProduct
-              key={product.id}
-              image={selectedVariant.image ?? product.image}
-              title={product.title}
-              quantity={selectedVariant.quantity}
-              price={product.price}
-              compareAtPrice={product.compareAtPrice}
-              onIncrease={() =>
-                increaseQuantity(
-                  "accessories",
-                  product.id,
-                  product.selectedVariantId,
-                )
-              }
-              onDecrease={() =>
-                decreaseQuantity(
-                  "accessories",
-                  product.id,
-                  product.selectedVariantId,
-                )
-              }
-            />
-          );
-        })}
-      </ReviewSection>
+          {selectedPlan && (
+            <ReviewSection title="Plan">
+              <ReviewPlan
+                icon={selectedPlan.icon}
+                title={selectedPlan.title}
+                highlight={selectedPlan.highlight}
+                monthlyPrice={selectedPlan.monthlyPrice}
+                compareAtPrice={selectedPlan.compareAtPrice}
+              />
+            </ReviewSection>
+          )}
 
-      {selectedPlan && (
-        <ReviewSection title="Plan">
-          <ReviewPlan
-            icon={selectedPlan.icon}
-            title={selectedPlan.title}
-            highlight={selectedPlan.highlight}
-            monthlyPrice={selectedPlan.monthlyPrice}
-            compareAtPrice={selectedPlan.compareAtPrice}
-          />
-        </ReviewSection>
-      )}
-
-      <ReviewShipping />
-      <ReviewPriceSummary total={subtotal} originalTotal={originalSubtotal} />
-      <ReviewSaving amount={savings} />
-      <CheckoutButton />
-      <SaveSystemLink />
+          <ReviewShipping />
+        </div>
+        <div className="space-y-4">
+          <ReviewPriceSummary total={subtotal} originalTotal={originalSubtotal} />
+          <ReviewSaving amount={savings} />
+          <CheckoutButton />
+          <SaveSystemLink />
+        </div>
+      </div>
     </aside>
   );
 }

@@ -6,11 +6,13 @@ import { useBundleStore } from "../../store/bundleStore";
 
 interface ProductGridProps {
   products: Product[];
-
   category: "products" | "sensors" | "accessories";
 }
 
-export default function ProductGrid({ products, category }: ProductGridProps) {
+export default function ProductGrid({
+  products,
+  category,
+}: ProductGridProps) {
   const increaseQuantity = useBundleStore((state) => state.increaseQuantity);
 
   const decreaseQuantity = useBundleStore((state) => state.decreaseQuantity);
@@ -18,13 +20,13 @@ export default function ProductGrid({ products, category }: ProductGridProps) {
   const selectVariant = useBundleStore((state) => state.selectVariant);
 
   return (
-    <div className="grid grid-cols-2 gap-[16px]">
+    <div className="grid grid-cols-1 gap-4 md:grid-cols-5 md:gap-3 lg:grid-cols-2 lg:gap-4">
       {products.map((product, index) => (
         <div
           key={product.id}
           className={
             index === products.length - 1
-              ? "col-span-2 flex justify-center"
+              ? "lg:col-span-2 lg:flex lg:justify-center"
               : ""
           }
         >

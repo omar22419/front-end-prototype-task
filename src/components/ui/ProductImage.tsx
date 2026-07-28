@@ -11,7 +11,7 @@ export default function ProductImage({
     <img
       src={src}
       alt={alt}
-      className="h-[90px] w-[90px] mt-3 object-contain"
+      className="h-[90px] w-[90px] md:w-full md:h-[117.39px] mt-3 object-contain"
     />
   );
 }

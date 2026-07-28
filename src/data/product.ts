@@ -102,8 +102,17 @@ export const cameraProducts: Product[] = [
     image: "https://res.cloudinary.com/duexs5wps/image/upload/v1784835990/0d7c4e5400ad8bef25d0ac786f415794250cefd5_z3thzq.png",
     price: 69.98,
     learnMore: "#",
+    variants: [
+      {
+        id: "black",
+        name: "black",
+        color: "#000000",
+        quantity: 0,
+        image:"https://res.cloudinary.com/duexs5wps/image/upload/v1784835990/0d7c4e5400ad8bef25d0ac786f415794250cefd5_z3thzq.png"
+      },
+    ],
     isSelected: false,
-    selectedVariantId: "Black",
+    selectedVariantId: "black",
   },
 
   {
